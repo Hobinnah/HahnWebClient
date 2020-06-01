@@ -1,0 +1,196 @@
+<div class="content-i">
+  <div class="content-box">
+      <div class="row">
+          <div class="col-lg-4">
+              <div class="element-wrapper">
+                  <h6 class="element-header">APPLICANT</h6>
+                  <div class="element-box">
+                      <form  [formGroup]="applicantForm" (ngSubmit)="onSubmit()" >
+                          <h5 class="form-header">APPLICANT DETAILS</h5>
+                          <div class="form-desc">This form is used to both create a new applicant record, edit and to view an existing applicant detail.
+                              All entries are validated before been sent to the server.
+                          </div>
+
+                          <div class="form-group row">
+                            <label for="">ID</label>
+                            <input class="form-control input" formControlName="ID" placeholder="0" type="number" readonly>
+                          </div>
+
+                          <div class="form-group row">
+                            <label for="">Name<span class="required">*</span></label>
+                            <input class="form-control input" formControlName="Name" placeholder="Applicant name (Required)" required="required" minlength="5"
+                                  [ngClass]="{ 'is-invalid': (submitted && applicantForm.get('Name').touched || applicantForm.get('Name').dirty) && !applicantForm.get('Name').valid }" type="text">
+
+                            <div *ngIf="applicantForm.get('Name').dirty" class="help-block form-text with-errors form-control-feedback">
+                                <div *ngIf="applicantForm.get('Name').errors?.required">Name is required</div>
+                                <div *ngIf="applicantForm.get('Name').errors?.minlength">Name must be at least five characters</div>
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                              <label for="">Family Name<span class="required">*</span></label>
+                              <input class="form-control input" formControlName="FamilyName" placeholder="Applicant family name (Required)" required="required" minlength="5"
+                                    [ngClass]="{ 'is-invalid': (submitted && applicantForm.get('FamilyName').touched || applicantForm.get('FamilyName').dirty) && !applicantForm.get('FamilyName').valid }" type="text">
+
+                              <div *ngIf="applicantForm.get('FamilyName').dirty" class="help-block form-text with-errors form-control-feedback">
+                                  <div *ngIf="applicantForm.get('FamilyName').errors?.required">Family name is required</div>
+                                  <div *ngIf="applicantForm.get('FamilyName').errors?.minlength">Family name must be at least five characters</div>
+                              </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <label for="">Address<span class="required">*</span></label>
+                            <input class="form-control input" formControlName="Address" placeholder="Address (Required)" required="required" minlength="10"
+                                  [ngClass]="{ 'is-invalid': (submitted && applicantForm.get('Address').touched || applicantForm.get('Address').dirty) && !applicantForm.get('Address').valid }" type="text">
+
+                            <div *ngIf="applicantForm.get('Address').dirty" class="help-block form-text with-errors form-control-feedback">
+                                <div *ngIf="applicantForm.get('Address').errors?.required">Address is required</div>
+                                <div *ngIf="applicantForm.get('Address').errors?.minlength">Address must be at least ten characters</div>
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <label for="">Country Of Origin<span class="required">*</span></label>
+                            <input class="form-control input" formControlName="CountryOfOrigin" placeholder="Country (Required)" required="required" (blur)="validateCountry($event.target.value)"
+                                  [ngClass]="{ 'is-invalid': (submitted && applicantForm.get('CountryOfOrigin').touched || applicantForm.get('CountryOfOrigin').dirty) && !applicantForm.get('CountryOfOrigin').valid }" type="text">
+
+                            <div *ngIf="applicantForm.get('CountryOfOrigin').dirty" class="help-block form-text with-errors form-control-feedback">
+                                <div *ngIf="applicantForm.get('CountryOfOrigin').errors?.required">Country is required</div>
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <label for="">Age<span class="required">*</span></label>
+                            <input class="form-control input" formControlName="Age" placeholder="Age (Required)" required="required"
+                                  [ngClass]="{ 'is-invalid': (submitted && applicantForm.get('Age').touched || applicantForm.get('Age').dirty) && !applicantForm.get('Age').valid }" type="number">
+
+                            <div *ngIf="applicantForm.get('Age').dirty" class="help-block form-text with-errors form-control-feedback">
+                                <div *ngIf="applicantForm.get('Age').errors?.required">Age is required</div>
+                                <div *ngIf="applicantForm.get('Age').errors">Age must be at between 20 and 60</div>
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <label for="">Email Address<span class="required">*</span></label>
+                            <input class="form-control input" formControlName="EMailAddress" placeholder="EMailAddress (Required)" required="required"
+                                  [ngClass]="{ 'is-invalid': (submitted && applicantForm.get('EMailAddress').touched || applicantForm.get('EMailAddress').dirty) && !applicantForm.get('EMailAddress').valid }" type="email">
+
+                            <div *ngIf="applicantForm.get('EMailAddress').dirty" class="help-block form-text with-errors form-control-feedback">
+                                <div *ngIf="applicantForm.get('EMailAddress').errors?.required">Email address is required</div>
+                                <div *ngIf="applicantForm.get('EMailAddress').errors?.email">Email address is invalid</div>
+                            </div>
+                          </div>
+
+                          <div class="form-check row">
+                            <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" formControlName="Hired">Hired
+                            </label>
+                          </div>
+                          <br/>
+
+                          <div class="form-group row" >
+                              <div class="col-lg-4" style="padding-left: 0px; margin-bottom: 15px;">
+                                  <button type="submit" class="btn fw-btn-fill btn-gradient-yellow" *ngIf="!isViewRecord"
+                                      [title]= "applicantForm.valid ? 'Save your entered data' : 'Disabled until form data is valid'"
+                                      [disabled]="!applicantForm.valid"> Submit
+                                  </button>
+                              </div>
+                              <div class="col-lg-4" style="padding-left: 0px;">
+                                  <button type="button" class="btn fw-btn-fill btn-gradient-dark" (click)="resetForm()"
+                                      [title]= "!applicantForm.untouched ? 'Save your entered data' : 'Disabled until at least one form field is filled'"
+                                      [disabled]="applicantForm.untouched"> Reset
+                                  </button>
+                              </div>
+                              <div class="col-lg-2"></div>
+                              <div class="col-lg-2"></div>
+                          </div>
+                      </form>
+                  </div>
+              </div>
+          </div>
+
+
+          <div class="col-lg-8">
+              <div class="element-wrapper">
+                  <h6 class="element-header">RECORDS</h6>
+                  <div class="element-box-tp">
+                    <!--------------------START - Applicant File Table------------------ -->
+                    <div class="controls-above-table">
+
+                        <!--------------------START ALERTS-------------------------------->
+                        <app-alert></app-alert>
+                        <!--------------------END ALERTS-------------------------------- -->
+
+                        <div class="row gutters-8">
+                          <div class="col-lg-2 col-12 form-group" style="padding-right: 0px;">
+                            <button type="button" class="fw-btn-fill btn-gradient-yellow"(click)="addApplicant()">Add</button>
+                          </div>
+                          <div class="col-lg-2 col-12 form-group">
+                            <button type="button" class="fw-btn-fill btn-gradient-dark"(click)="onExportAsXLSX()">Download</button>
+                          </div>
+                          <div class="col-lg-5 col-12 form-group" style="padding-right: 0px;">
+                            <input #myInput class="form-control form-control-sm rounded bright" placeholder="Search by applicant name" type="text" (input)="filterApplicants(myInput.value)">
+                          </div>
+                          <div class="col-lg-3 col-12 form-group">
+                            <select class="form-control form-control-sm rounded bright width100Percent">
+                              <option selected="selected" value="">Active</option>
+                            </select>
+                          </div>
+                      </div>
+
+                    </div>
+                    <!--------------------END - Controls Above Table------------------ -->
+                    <!--------------------START - Table with actions------------------  -->
+                    <div class="element-wrapper">
+                      <div class="element-box">
+                          <div class="table-responsive">
+                              <table class="table table-bordered table-lg table-v2 table-striped">
+                                  <thead>
+                                      <tr>
+                                          <th class="text-center" style="width: 50px;"><input class="form-control" type="checkbox"></th>
+                                          <th class="text-right">ID</th>
+                                          <th class="text-left">Name</th>
+                                          <th class="text-right">Age</th>
+                                          <th class="text-left">Country</th>
+                                          <th class="text-left">Email</th>
+                                          <th class="text-center">Status</th>
+                                          <th>Actions</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                      <tr *ngFor="let applicant of applicants | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
+                                          <td class="text-center"><input class="form-control" type="checkbox"></td>
+                                          <td class="text-right">{{applicant?.id}}</td>
+                                          <td class="text-left">{{applicant?.name}} {{applicant?.familyName}}</td>
+                                          <td class="text-right">{{applicant?.age}}</td>
+                                          <td class="text-left">{{applicant?.countryOfOrigin}}</td>
+                                          <th class="text-left">{{applicant?.eMailAddress}}</th>
+                                          <td class="text-center">
+                                              <div class="status-pill green" data-title="Complete" data-toggle="tooltip" title="Complete"></div>
+                                          </td>
+                                          <td class="row-actions">
+                                            <a href="#" data-title="Edit details" title="Edit details" data-toggle="tooltip" (click) ="onEditApplicant(applicant)" data-original-title><i class="os-icon os-icon-ui-49"></i></a>
+                                            <a href="#" data-title="View Details" title="View Details" data-toggle="tooltip" (click) ="onViewApplicant(applicant)" data-original-title><i class="os-icon os-icon-grid-10"></i></a>
+                                            <a class="danger" href="#" data-title="Delete Details" title="Delete Details" data-toggle="tooltip" (click) ="onDeleteApplicant(applicant)" data-original-title><i class="os-icon os-icon-ui-15"></i></a>
+                                          </td>
+                                      </tr>
+                                  </tbody>
+
+                              </table>
+                              <div style="text-align: right;" *ngIf="applicants?.length > 1">
+                                 <ngb-pagination class="d-flex justify-content-end"
+                                    [(page)]="page" [pageSize]="pageSize" [rotate]="true" [boundaryLinks]="true" [collectionSize]="applicants?.length">
+                                 </ngb-pagination>
+                              </div>
+                          </div>
+                      </div>
+                    </div>
+                    <!--------------------END - Table with actions------------------ -->
+                    <!--------------------START - Controls below table------------------  -->
+                    <!--------------------END - Applicant File Table-------------------->
+                </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
